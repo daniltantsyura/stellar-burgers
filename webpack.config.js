@@ -1,5 +1,5 @@
 const path = require('path');
-const ESLintPlugin = require('eslint-webpack-plugin');
+// const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
@@ -48,9 +48,9 @@ module.exports = {
     ]
   },
   plugins: [
-    new ESLintPlugin({
-      extensions: ['.js', '.jsx', '.ts', '.tsx']
-    }),
+    // new ESLintPlugin({
+    //   extensions: ['.js', '.jsx', '.ts', '.tsx']
+    // }),
     new HtmlWebpackPlugin({
       template: './public/index.html'
     }),
@@ -89,6 +89,7 @@ module.exports = {
     static: path.join(__dirname, './dist'),
     compress: true,
     historyApiFallback: true,
-    port: 4000
+    port: 4000,
+    hot: true
   }
 };
