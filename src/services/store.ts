@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, PayloadAction, SerializedError } from '@reduxjs/toolkit';
 
 import {
   TypedUseSelectorHook,
@@ -12,6 +12,20 @@ const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production'
 });
+
+export type TRejecedAction<DataType> = PayloadAction<unknown, string, DataType & ({
+    rejectedWithValue: true;
+} | ({
+    rejectedWithValue: false;
+} & {})), SerializedError>;
+
+export type TRejectedData<TArg> = {
+  arg: TArg;
+  requestId: string;
+  requestStatus: "rejected";
+  aborted: boolean;
+  condition: boolean;
+}
 
 export type RootState = ReturnType<typeof rootReducer>;
 

@@ -8,7 +8,7 @@ export const BurgerConstructor: FC = () => {
     bun: {
       price: 0
     },
-    ingredients: []
+    ingredients: [],
   };
 
   const orderRequest = false;
@@ -27,10 +27,8 @@ export const BurgerConstructor: FC = () => {
         (s: number, v: TConstructorIngredient) => s + v.price,
         0
       ),
-    [constructorItems]
+    [constructorItems],
   );
-
-  return null;
 
   return (
     <BurgerConstructorUI

@@ -1,17 +1,31 @@
-import { registerUserApi, TAuthResponse, TRegisterData } from "@api";
-import { createAsyncThunk, createSlice, SerializedError } from "@reduxjs/toolkit";
+import { loginUserApi, registerUserApi, TAuthResponse, TLoginData, TRegisterData } from "@api";
+import { AsyncThunk, createAsyncThunk, createSlice, PayloadAction, SerializedError } from "@reduxjs/toolkit";
+import { AsyncThunkConfig } from "@reduxjs/toolkit/dist/createAsyncThunk";
+import { RejectedActionFromAsyncThunk } from "@reduxjs/toolkit/dist/matchers";
 import { TUser } from "@utils-types";
+import { TRejecedAction, TRejectedData } from "../store";
 
 type TUserState = {
     user: TUser | null,
-    error: unknown | null,
-    loading: boolean
+    userError: unknown | null,
+    userLoading: boolean
 }
 
 const initialState: TUserState = {
     user: null,
-    error: null,
-    loading: false
+    userError: null,
+    userLoading: false
+}
+
+const handlePending = (state: TUserState) => {
+    state.userLoading = true;
+    state.userError = null;
+    state.user = null;
+}
+
+const handleRejected = (state: TUserState, action: TRejecedAction<TRejectedData<TRegisterData | TLoginData>>) => {
+    state.userLoading = false;
+    state.userError = action.payload;
 }
 
 export const userSlice = createSlice({
@@ -22,30 +36,37 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(registerUser.pending, (state: TUserState) => {
-                state.loading = true;
-                state.error = null;
-                state.user = null;
-            })
-            .addCase(registerUser.rejected, (state: TUserState, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
-            .addCase(registerUser.fulfilled, (state: TUserState, action) => {
-                state.loading = false;
-                state.error = null;
+            .addCase(registerUserThunk.pending, handlePending)
+            .addCase(registerUserThunk.rejected, handleRejected)
+            .addCase(registerUserThunk.fulfilled, (state: TUserState, action) => {
+                state.userLoading = false;
+                state.userError = null;
                 state.user = action.payload.user;
             })
+            .addCase(loginUserThunk.pending, handlePending)
+            .addCase(loginUserThunk.rejected, handleRejected)
+            .addCase(loginUserThunk.fulfilled, (state: TUserState, action) => {
+                state.userLoading = false;
+                state.userError = null;
+                state.user = action.payload.user;
+            });
     },
     selectors: {
         getUser: (state) => (state.user),
-    }
+        getUserLoading: (state) => (state.userLoading),
+    },
 });
 
-export const {getUser} = userSlice.selectors;
+export const {getUser, getUserLoading} = userSlice.selectors;
 
-export const registerUser = createAsyncThunk('user/register', 
+export const registerUserThunk = createAsyncThunk('user/register', 
     async (data: TRegisterData) => {
         return await registerUserApi(data);
+    }
+);
+
+export const loginUserThunk = createAsyncThunk('user/login', 
+    async (data: TLoginData) => {
+        return await loginUserApi(data);
     }
 );
