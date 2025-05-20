@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { TConstructorIngredient, TIngredient } from "@utils-types";
+import { useSelector } from "../store";
 
 type TConstructorState = {
     constructor: {
         bun: TIngredient | null,
-        ingredients: TConstructorIngredient[],
+        ingredients: Array<TConstructorIngredient>,
     },
 };
 
@@ -23,21 +24,22 @@ export const constructorSlice = createSlice({
             state.constructor.bun = action.payload;
         },
         addIngredient: (state, action) => {
-            state.constructor.ingredients.push(action.payload);
+            state.constructor.ingredients?.push(action.payload);
         },
         removeIngredient: (state, action) => {
-            state.constructor.ingredients = state.constructor.ingredients.filter((ingredient) => {
+            state.constructor.ingredients = state.constructor.ingredients?.filter((ingredient) => {
                 ingredient.id !== action.payload.id;
             });
         }
     },
-    extraReducers: (builder) => {
-    },
     selectors: {
-        getConstructorItems: (state) => (state.constructor),
+        getConstructor: (state) => (state.constructor),
+        getConstructorBun: (state) => (state.constructor.bun),
+        getConstructorIngredients: (state) => (state.constructor.ingredients),
     }
 });
 
+
 export const {chooseBun, addIngredient, removeIngredient} = constructorSlice.actions;
 
-export const {getConstructorItems} = constructorSlice.selectors;
+export const {getConstructor, getConstructorBun, getConstructorIngredients} = constructorSlice.selectors;

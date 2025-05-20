@@ -22,9 +22,16 @@ const App = () => (
         <Route path='/register' element={<ProtectedRoute><Register/></ProtectedRoute>}/>
         <Route path='/forgot-password' element={<ProtectedRoute><ForgotPassword/></ProtectedRoute>}/>
         <Route path='/reset-password' element={<ProtectedRoute><ResetPassword/></ProtectedRoute>}/>
-        <Route path='/profile' element={<ProtectedRoute onlyUnAuth><Profile/></ProtectedRoute>}>
-          <Route path='orders' element={<ProfileOrders/>}>
-            <Route path=':number' element={<Modal title='Информация о заказе' onClose={() => {}}><OrderInfo/></Modal>}/>
+        <Route path='/profile' >
+          <Route index element={<ProtectedRoute onlyUnAuth><Profile/></ProtectedRoute>}></Route>
+          <Route path='orders' element={<ProtectedRoute ><ProfileOrders/></ProtectedRoute>}>
+            <Route path=':number' element={
+              <ProtectedRoute>
+                <Modal title='Информация о заказе' onClose={() => {}}>
+                  <OrderInfo/>
+                </Modal>
+              </ProtectedRoute>
+              }/>
           </Route>
         </Route>
         <Route path='*' element={<NotFound404/>} />
