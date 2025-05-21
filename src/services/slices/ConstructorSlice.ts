@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TConstructorIngredient, TIngredient } from "@utils-types";
 import { useSelector } from "../store";
 
@@ -17,19 +17,34 @@ const initialState: TConstructorState = {
 }
 
 export const constructorSlice = createSlice({
-    name: 'constructor',
+    name: 'burgerConstructor',
     initialState,
     reducers: {
-        chooseBun: (state, action) => {
+        chooseBun: (state: TConstructorState, action: PayloadAction<TIngredient>) => {
             state.constructor.bun = action.payload;
         },
         addIngredient: (state, action) => {
-            state.constructor.ingredients?.push(action.payload);
+            const payloadWithId = {...action.payload, id: state.constructor.ingredients.length};
+            state.constructor.ingredients.push(payloadWithId);
         },
         removeIngredient: (state, action) => {
-            state.constructor.ingredients = state.constructor.ingredients?.filter((ingredient) => {
-                ingredient.id !== action.payload.id;
+            state.constructor.ingredients = state.constructor.ingredients.filter((ingredient) => {
+                return ingredient.id !== action.payload.id;
             });
+        },
+        moveIngredient: (state, action: PayloadAction<{ingredient: TConstructorIngredient, direction: -1 | 1}>) => {
+            const { ingredient, direction } = action.payload;
+            const ingredients = state.constructor.ingredients;
+            const index = ingredients.findIndex(i => i.id === ingredient.id);
+        
+            if (index === -1) {
+                return;
+            }
+        
+            if ((direction === -1 && index > 0) || (direction === 1 && index < ingredients.length - 1)) {
+                const targetIndex = index + direction;
+                [ingredients[index], ingredients[targetIndex]] = [ingredients[targetIndex], ingredients[index]];
+            }
         }
     },
     selectors: {
@@ -40,6 +55,6 @@ export const constructorSlice = createSlice({
 });
 
 
-export const {chooseBun, addIngredient, removeIngredient} = constructorSlice.actions;
+export const {chooseBun, addIngredient, removeIngredient, moveIngredient} = constructorSlice.actions;
 
 export const {getConstructor, getConstructorBun, getConstructorIngredients} = constructorSlice.selectors;

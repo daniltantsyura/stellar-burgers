@@ -6,10 +6,11 @@ import { useSelector } from "../../services/store";
 
 type ProtectedRouteProps = {
     children?: ReactElement;
+    onlyAuth?: boolean;
     onlyUnAuth?: boolean;
 }
 
-export const ProtectedRoute = ({children, onlyUnAuth}: ProtectedRouteProps) => {
+export const ProtectedRoute = ({children, onlyAuth, onlyUnAuth}: ProtectedRouteProps) => {
     const location = useLocation();
     const user = useSelector(getUser);
     const loading = useSelector(getUserLoading);
@@ -18,17 +19,19 @@ export const ProtectedRoute = ({children, onlyUnAuth}: ProtectedRouteProps) => {
         return <Preloader/>;
     }
 
-    if (onlyUnAuth && !user && location.pathname !== '/login') {
+    if (!user && location.pathname !== '/login') {
         return <Navigate replace to='/login' state={{from: location}}/>;
     }
 
     const from: Location = location.state?.from || {pathname: '/profile'};
+
     if (user && from.pathname !== location.pathname && onlyUnAuth) {
+        console.log(location.pathname);
 
         return <Navigate replace to={from}/>;
     }
 
-    if((children && !onlyUnAuth) || (children && onlyUnAuth && user)) {
+    if((children && !onlyAuth) || (children && onlyAuth && user)) {
         return children;
     }
 

@@ -3,41 +3,42 @@ import '../../index.css';
 import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/ProtectedRoute';
 
-const App = () => (
-  <div className={styles.app}>
-    <BrowserRouter>
-    <AppHeader />
-      <Routes>
-        <Route path='/' element={<ConstructorPage/>} />
-        <Route path='/feed' element={<Feed/>}>
-          <Route path=':number' element={<Modal title='Информация о заказе' onClose={() => {}}><OrderInfo/></Modal>}/>
-        </Route>
-        <Route path='/ingredients'>
-          <Route path=':id' element={<Modal title='Информация об ингредиенте' onClose={() => {}}><IngredientDetails/></Modal>}/>
-        </Route>
-        <Route path='/login' element={<ProtectedRoute onlyUnAuth><Login/></ProtectedRoute>}/>
-        <Route path='/register' element={<ProtectedRoute><Register/></ProtectedRoute>}/>
-        <Route path='/forgot-password' element={<ProtectedRoute><ForgotPassword/></ProtectedRoute>}/>
-        <Route path='/reset-password' element={<ProtectedRoute><ResetPassword/></ProtectedRoute>}/>
-        <Route path='/profile' >
-          <Route index element={<ProtectedRoute onlyUnAuth><Profile/></ProtectedRoute>}></Route>
-          <Route path='orders' element={<ProtectedRoute ><ProfileOrders/></ProtectedRoute>}>
-            <Route path=':number' element={
-              <ProtectedRoute>
-                <Modal title='Информация о заказе' onClose={() => {}}>
-                  <OrderInfo/>
-                </Modal>
-              </ProtectedRoute>
-              }/>
+const App = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className={styles.app}>
+        <AppHeader />
+        <Routes >
+          <Route path='/' element={<ConstructorPage />}>
+            <Route path='/ingredients/:id' element={<Modal title='Информация об ингредиенте' onClose={() => {navigate(-1)}}><IngredientDetails /></Modal>} />
           </Route>
-        </Route>
-        <Route path='*' element={<NotFound404/>} />
-      </Routes>
-    </BrowserRouter>
-  </div>
-);
+          <Route path='/feed' element={<Feed />}>
+            <Route path=':number' element={<Modal title='Информация о заказе' onClose={() => {navigate(-1)}}><OrderInfo /></Modal>} />
+          </Route>
+          <Route path='/login' element={<ProtectedRoute onlyUnAuth><Login /></ProtectedRoute>} />
+          <Route path='/register' element={<ProtectedRoute onlyUnAuth><Register /></ProtectedRoute>} />
+          <Route path='/forgot-password' element={<ProtectedRoute onlyUnAuth><ForgotPassword /></ProtectedRoute>} />
+          <Route path='/reset-password' element={<ProtectedRoute onlyUnAuth><ResetPassword /></ProtectedRoute>} />
+          <Route path='/profile' >
+            <Route index element={<ProtectedRoute onlyAuth><Profile /></ProtectedRoute>}></Route>
+            <Route path='orders' element={<ProtectedRoute onlyAuth><ProfileOrders /></ProtectedRoute>}>
+              <Route path=':number' element={
+                <ProtectedRoute>
+                  <Modal title='Информация о заказе' onClose={() => {navigate(-1)}}>
+                    <OrderInfo />
+                  </Modal>
+                </ProtectedRoute>
+              } />
+            </Route>
+          </Route>
+          <Route path='*' element={<NotFound404 />} />
+        </Routes>
+    </div>
+  )
+};
 
 export default App;

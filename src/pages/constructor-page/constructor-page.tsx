@@ -7,6 +7,7 @@ import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC, useEffect } from 'react';
 import { getIngredientsLoading, getIngredientsThunk } from '../../services/slices/IngredientsSlice';
+import { Outlet } from 'react-router-dom';
 
 export const ConstructorPage: FC = () => {
   const isIngredientsLoading = useSelector(getIngredientsLoading);
@@ -18,6 +19,7 @@ export const ConstructorPage: FC = () => {
 
   return (
     <>
+      <Outlet/>
       {isIngredientsLoading ? (
         <Preloader />
       ) : (
