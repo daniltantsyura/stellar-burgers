@@ -1,10 +1,10 @@
-import { loginUserApi, registerUserApi, TAuthResponse, TLoginData, TRegisterData, updateUserApi } from "@api";
+import { getUserApi, loginUserApi, logoutApi, registerUserApi, TAuthResponse, TLoginData, TRegisterData, updateUserApi } from "@api";
 import { AsyncThunk, createAsyncThunk, createSlice, PayloadAction, SerializedError } from "@reduxjs/toolkit";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/dist/createAsyncThunk";
 import { RejectedActionFromAsyncThunk } from "@reduxjs/toolkit/dist/matchers";
 import { TUser } from "@utils-types";
 import { TRejecedAction, TRejectedData } from "../store";
-import { setCookie } from "../../utils/cookie";
+import { deleteCookie, setCookie } from "../../utils/cookie";
 
 type TUserState = {
     user: TUser | null,
@@ -24,7 +24,7 @@ const handlePending = (state: TUserState) => {
     state.user = null;
 }
 
-const handleRejected = (state: TUserState, action: TRejecedAction<TRejectedData<TRegisterData | TLoginData | Partial<TRegisterData>>>) => {
+const handleRejected = (state: TUserState, action: TRejecedAction<TRejectedData<unknown>>) => {
     state.userLoading = false;
     state.userError = action.payload;
 }
@@ -50,6 +50,7 @@ export const userSlice = createSlice({
                 state.userLoading = false;
                 state.userError = null;
                 setCookie('accessToken', action.payload.accessToken);
+                localStorage.setItem('refreshToken', action.payload.refreshToken);
                 state.user = action.payload.user;
             })
             .addCase(updateUserThunk.pending, handlePending)
@@ -58,6 +59,28 @@ export const userSlice = createSlice({
                 state.userLoading = false;
                 state.userError = null;
                 state.user = action.payload.user;
+            })
+            .addCase(getUserThunk.pending, handlePending)
+            .addCase(getUserThunk.rejected, handleRejected)
+            .addCase(getUserThunk.fulfilled, (state, action) => {
+                state.user = action.payload.user;
+                state.userError = null;
+                state.userLoading = false;
+            })
+            .addCase(logoutThunk.pending, (store) => {
+                store.userError = null;
+                store.userLoading = true;
+            })
+            .addCase(logoutThunk.rejected, (store, action) => {
+                store.userError = action.payload;
+                store.userLoading = false;
+            })
+            .addCase(logoutThunk.fulfilled, (store) => {
+                store.user = null;
+                deleteCookie('accessToken');
+                localStorage.removeItem('refreshToken');
+                store.userError = null;
+                store.userLoading = false;
             });
     },
     selectors: {
@@ -83,5 +106,17 @@ export const loginUserThunk = createAsyncThunk('user/login',
 export const updateUserThunk = createAsyncThunk('user/update', 
     async (data: Partial<TRegisterData>) => {
         return await updateUserApi(data);
+    }
+);
+
+export const getUserThunk = createAsyncThunk('user/get', 
+    async () => {
+        return await getUserApi();
+    }
+);
+
+export const logoutThunk = createAsyncThunk('user/logout', 
+    async () => {
+        await logoutApi();
     }
 );

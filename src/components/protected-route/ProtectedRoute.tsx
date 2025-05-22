@@ -1,8 +1,8 @@
 import { Preloader } from "@ui";
-import { FC, ReactElement, ReactNode } from "react";
+import { FC, ReactElement, ReactNode, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { getUserLoading, getUser } from "../../services/slices/UserSlice";
-import { useSelector } from "../../services/store";
+import { getUserLoading, getUser, getUserThunk } from "../../services/slices/UserSlice";
+import { useDispatch, useSelector } from "../../services/store";
 
 type ProtectedRouteProps = {
     children?: ReactElement;
@@ -15,6 +15,14 @@ export const ProtectedRoute = ({children, onlyAuth, onlyUnAuth}: ProtectedRouteP
     const user = useSelector(getUser);
     const loading = useSelector(getUserLoading);
 
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!user) {
+            dispatch(getUserThunk());
+        }
+    }, []);
+
     if (loading) {
         return <Preloader/>;
     }
@@ -26,8 +34,6 @@ export const ProtectedRoute = ({children, onlyAuth, onlyUnAuth}: ProtectedRouteP
     const from: Location = location.state?.from || {pathname: '/profile'};
 
     if (user && from.pathname !== location.pathname && onlyUnAuth) {
-        console.log(location.pathname);
-
         return <Navigate replace to={from}/>;
     }
 
