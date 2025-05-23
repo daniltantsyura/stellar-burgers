@@ -14,11 +14,21 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
   <header className={styles.header}>
     <nav className={`${styles.menu} p-4`}>
       <div className={styles.menu_part_left}>
-        <NavLink className={({isActive})=>clsx(styles.link, isActive ? styles.link_active : null)} to='/'>
+        <NavLink
+          className={({ isActive }) =>
+            clsx(styles.link, isActive ? styles.link_active : null)
+          }
+          to='/'
+        >
           <BurgerIcon type={'primary'} />
           <p className='text text_type_main-default ml-2 mr-10'>Конструктор</p>
         </NavLink>
-        <NavLink className={({isActive})=>clsx(styles.link, isActive ? styles.link_active : null)} to='/feed'>
+        <NavLink
+          className={({ isActive }) =>
+            clsx(styles.link, isActive ? styles.link_active : null)
+          }
+          to='/feed'
+        >
           <ListIcon type={'primary'} />
           <p className='text text_type_main-default ml-2'>Лента заказов</p>
         </NavLink>
@@ -26,7 +36,16 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
       <div className={styles.logo}>
         <Logo className='' />
       </div>
-      <NavLink to='/profile' className={({isActive})=>clsx(styles.link_position_last, styles.link, isActive ? styles.link_active : null)}>
+      <NavLink
+        to='/profile'
+        className={({ isActive }) =>
+          clsx(
+            styles.link_position_last,
+            styles.link,
+            isActive ? styles.link_active : null
+          )
+        }
+      >
         <ProfileIcon type={'primary'} />
         <p className='text text_type_main-default ml-2'>
           {userName || 'Личный кабинет'}

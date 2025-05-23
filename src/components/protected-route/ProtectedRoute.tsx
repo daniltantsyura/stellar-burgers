@@ -1,45 +1,53 @@
-import { Preloader } from "@ui";
-import { FC, ReactElement, ReactNode, useEffect } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { getUserLoading, getUser, getUserThunk } from "../../services/slices/UserSlice";
-import { useDispatch, useSelector } from "../../services/store";
+import { Preloader } from '@ui';
+import { FC, ReactElement, ReactNode, useEffect } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import {
+  getUserLoading,
+  getUser,
+  getUserThunk
+} from '../../services/slices/UserSlice';
+import { useDispatch, useSelector } from '../../services/store';
 
 type ProtectedRouteProps = {
-    children?: ReactElement;
-    onlyAuth?: boolean;
-    onlyUnAuth?: boolean;
-}
+  children?: ReactElement;
+  onlyAuth?: boolean;
+  onlyUnAuth?: boolean;
+};
 
-export const ProtectedRoute = ({children, onlyAuth, onlyUnAuth}: ProtectedRouteProps) => {
-    const location = useLocation();
-    const user = useSelector(getUser);
-    const loading = useSelector(getUserLoading);
+export const ProtectedRoute = ({
+  children,
+  onlyAuth,
+  onlyUnAuth
+}: ProtectedRouteProps) => {
+  const location = useLocation();
+  const user = useSelector(getUser);
+  const loading = useSelector(getUserLoading);
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (!user) {
-            dispatch(getUserThunk());
-        }
-    }, []);
-
-    if (loading) {
-        return <Preloader/>;
+  useEffect(() => {
+    if (!user) {
+      dispatch(getUserThunk());
     }
+  }, []);
 
-    if (!user && location.pathname !== '/login') {
-        return <Navigate replace to='/login' state={{from: location}}/>;
-    }
+  if (loading) {
+    return <Preloader />;
+  }
 
-    const from: Location = location.state?.from || {pathname: '/profile'};
+  if (!user && location.pathname !== '/login') {
+    return <Navigate replace to='/login' state={{ from: location }} />;
+  }
 
-    if (user && from.pathname !== location.pathname && onlyUnAuth) {
-        return <Navigate replace to={from}/>;
-    }
+  const from: Location = location.state?.from || { pathname: '/profile' };
 
-    if((children && !onlyAuth) || (children && onlyAuth && user)) {
-        return children;
-    }
+  if (user && from.pathname !== location.pathname && onlyUnAuth) {
+    return <Navigate replace to={from} />;
+  }
 
-    return null;
-}
+  if ((children && !onlyAuth) || (children && onlyAuth && user)) {
+    return children;
+  }
+
+  return null;
+};

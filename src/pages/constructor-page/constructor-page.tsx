@@ -6,7 +6,10 @@ import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC, useEffect } from 'react';
-import { getIngredientsLoading, getIngredientsThunk } from '../../services/slices/IngredientsSlice';
+import {
+  getIngredientsLoading,
+  getIngredientsThunk
+} from '../../services/slices/IngredientsSlice';
 import { Outlet } from 'react-router-dom';
 
 export const ConstructorPage: FC = () => {
@@ -19,7 +22,7 @@ export const ConstructorPage: FC = () => {
 
   return (
     <>
-      <Outlet/>
+      <Outlet />
       {isIngredientsLoading ? (
         <Preloader />
       ) : (

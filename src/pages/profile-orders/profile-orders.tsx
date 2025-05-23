@@ -17,5 +17,5 @@ export const ProfileOrders: FC = () => {
     <>
       <ProfileOrdersUI orders={orders} />
     </>
-);
+  );
 };

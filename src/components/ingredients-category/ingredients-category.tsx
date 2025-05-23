@@ -16,7 +16,6 @@ export const IngredientsCategory = forwardRef<
     ingredients: []
   };
 
-
   const ingredientsCounters = useMemo(() => {
     const { bun, ingredients } = burgerConstructor;
     const counters: { [key: string]: number } = {};

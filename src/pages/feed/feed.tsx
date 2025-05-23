@@ -20,7 +20,12 @@ export const Feed: FC = () => {
 
   return (
     <>
-      <FeedUI orders={orders} handleGetFeeds={() => {dispatch(getFeedsThunk())}} />
+      <FeedUI
+        orders={orders}
+        handleGetFeeds={() => {
+          dispatch(getFeedsThunk());
+        }}
+      />
     </>
   );
 };

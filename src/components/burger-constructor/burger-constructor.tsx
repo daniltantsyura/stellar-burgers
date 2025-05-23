@@ -2,8 +2,16 @@ import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
-import { getConstructor, getConstructorBun } from '../../services/slices/ConstructorSlice';
-import { clearCurrentOrder, getCurrentOrder, getOrderRequest, orderBurgerThunk } from '../../services/slices/OrdersSlice';
+import {
+  getConstructor,
+  getConstructorBun
+} from '../../services/slices/ConstructorSlice';
+import {
+  clearCurrentOrder,
+  getCurrentOrder,
+  getOrderRequest,
+  orderBurgerThunk
+} from '../../services/slices/OrdersSlice';
 import { getUser } from '../../services/slices/UserSlice';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,20 +31,27 @@ export const BurgerConstructor: FC = () => {
       navigate('/login');
       return;
     }
-    dispatch(orderBurgerThunk([constructorItems.bun._id, ...constructorItems.ingredients.map((ingredient) => {return ingredient._id})]));
+    dispatch(
+      orderBurgerThunk([
+        constructorItems.bun._id,
+        ...constructorItems.ingredients.map((ingredient) => ingredient._id)
+      ])
+    );
   };
   const closeOrderModal = () => {
     dispatch(clearCurrentOrder());
   };
 
   const price = useMemo(
-    () => (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
-      (constructorItems.ingredients ?
-      constructorItems.ingredients?.reduce(
-        (s: number, v: TConstructorIngredient) => s + v.price,
-        0
-      ) : 0),
-    [constructorItems],
+    () =>
+      (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
+      (constructorItems.ingredients
+        ? constructorItems.ingredients?.reduce(
+            (s: number, v: TConstructorIngredient) => s + v.price,
+            0
+          )
+        : 0),
+    [constructorItems]
   );
 
   return (
