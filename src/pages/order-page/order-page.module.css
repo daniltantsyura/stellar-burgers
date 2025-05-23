@@ -1,0 +1,12 @@
+.wrapper {
+    padding-block-start: 120px;
+    display: grid;
+    justify-content: center;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+}

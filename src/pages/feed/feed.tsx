@@ -4,6 +4,7 @@ import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { getFeedsOrders, getFeedsThunk } from '../../services/slices/FeedSlice';
+import { Outlet } from 'react-router-dom';
 
 export const Feed: FC = () => {
   const orders: TOrder[] = useSelector(getFeedsOrders);
@@ -17,5 +18,9 @@ export const Feed: FC = () => {
     return <Preloader />;
   }
 
-  <FeedUI orders={orders} handleGetFeeds={() => {}} />;
+  return (
+    <>
+      <FeedUI orders={orders} handleGetFeeds={() => {dispatch(getFeedsThunk())}} />
+    </>
+  );
 };
