@@ -14,8 +14,6 @@ import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import {
-  BrowserRouter,
-  Navigate,
   Route,
   Routes,
   useLocation,
@@ -140,6 +138,7 @@ const App = () => {
                 title='Информация о заказе'
                 onClose={() => {
                   navigate(-1);
+                  dispatch(clearCurrentOrder());
                 }}
               >
                 <OrderInfo />
