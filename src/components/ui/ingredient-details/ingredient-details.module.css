@@ -22,3 +22,10 @@
   flex-direction: column;
   align-items: center;
 }
+
+.wrapper {
+    margin-block-start: 120px;
+    inline-size: 100%;
+    display: flex;
+    justify-content: center;
+}
