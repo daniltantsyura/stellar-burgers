@@ -12,11 +12,10 @@ import {
   AsyncThunk,
   createAsyncThunk,
   createSlice,
+  isRejectedWithValue,
   PayloadAction,
   SerializedError
 } from '@reduxjs/toolkit';
-import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { RejectedActionFromAsyncThunk } from '@reduxjs/toolkit/dist/matchers';
 import { TUser } from '@utils-types';
 import { TRejecedAction, TRejectedData } from '../store';
 import { deleteCookie, setCookie } from '../../utils/cookie';
@@ -65,8 +64,6 @@ export const userSlice = createSlice({
       .addCase(loginUserThunk.fulfilled, (state: TUserState, action) => {
         state.userLoading = false;
         state.userError = null;
-        setCookie('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
         state.user = action.payload.user;
       })
       .addCase(updateUserThunk.pending, handlePending)
@@ -93,8 +90,6 @@ export const userSlice = createSlice({
       })
       .addCase(logoutThunk.fulfilled, (store) => {
         store.user = null;
-        deleteCookie('accessToken');
-        localStorage.removeItem('refreshToken');
         store.userError = null;
         store.userLoading = false;
       });
@@ -114,7 +109,12 @@ export const registerUserThunk = createAsyncThunk(
 
 export const loginUserThunk = createAsyncThunk(
   'user/login',
-  async (data: TLoginData) => await loginUserApi(data)
+  async (data: TLoginData) => {
+    const res = await loginUserApi(data);
+    setCookie('accessToken', res.accessToken);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    return res;
+  }
 );
 
 export const updateUserThunk = createAsyncThunk(
@@ -127,6 +127,11 @@ export const getUserThunk = createAsyncThunk(
   async () => await getUserApi()
 );
 
-export const logoutThunk = createAsyncThunk('user/logout', async () => {
-  await logoutApi();
-});
+export const logoutThunk = createAsyncThunk('user/logout',
+  async () => {
+    const res = await logoutApi();
+    deleteCookie('accessToken');
+    localStorage.removeItem('refreshToken');
+    return res;
+  }
+);

@@ -69,7 +69,6 @@ export const ordersSlice = createSlice({
       .addCase(orderBurgerThunk.rejected, handleOrderRejected)
       .addCase(orderBurgerThunk.fulfilled, (state, action) => {
         state.orders = [...state.orders, action.payload.order];
-        console.log(state.orders);
         state.currentOrder = action.payload.order;
         state.ordersError = null;
         state.orderRequest = false;

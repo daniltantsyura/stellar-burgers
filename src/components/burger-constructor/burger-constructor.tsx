@@ -3,8 +3,8 @@ import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import {
+  clearConstructor,
   getConstructor,
-  getConstructorBun
 } from '../../services/slices/ConstructorSlice';
 import {
   clearCurrentOrder,
@@ -13,12 +13,13 @@ import {
   orderBurgerThunk
 } from '../../services/slices/OrdersSlice';
 import { getUser } from '../../services/slices/UserSlice';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const user = useSelector(getUser);
   const navigate = useNavigate();
+  const location = useLocation();
   const constructorItems = useSelector(getConstructor);
 
   const orderRequest = useSelector(getOrderRequest);
@@ -28,15 +29,20 @@ export const BurgerConstructor: FC = () => {
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
     if (!user) {
-      navigate('/login');
+      navigate('/login', {state: {from: location}});
       return;
     }
     dispatch(
       orderBurgerThunk([
         constructorItems.bun._id,
+        constructorItems.bun._id,
         ...constructorItems.ingredients.map((ingredient) => ingredient._id)
       ])
-    );
+    ).then((action) => {
+    if (orderBurgerThunk.fulfilled.match(action)) {
+      dispatch(clearConstructor());
+    }
+    });
   };
   const closeOrderModal = () => {
     dispatch(clearCurrentOrder());

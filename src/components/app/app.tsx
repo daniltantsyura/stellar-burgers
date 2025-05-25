@@ -20,8 +20,8 @@ import {
   useNavigate
 } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/ProtectedRoute';
-import { useDispatch } from '../../services/store';
-import { clearCurrentOrder } from '../../services/slices/OrdersSlice';
+import { useDispatch, useSelector } from '../../services/store';
+import { clearCurrentOrder, getCurrentOrder } from '../../services/slices/OrdersSlice';
 import { IngredientPage } from '../../pages/ingredient-page/ingredient-page';
 import { OrderPage } from '../../pages/order-page/order-page';
 
@@ -29,6 +29,7 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const currentOrder = useSelector(getCurrentOrder);
 
   const background = location.state?.background;
 
@@ -120,7 +121,7 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Modal
-                  title='Информация о заказе'
+                  title={`#${currentOrder?.number}`}
                   onClose={() => {
                     navigate(-1);
                     dispatch(clearCurrentOrder());
@@ -135,7 +136,7 @@ const App = () => {
             path='/feed/:number'
             element={
               <Modal
-                title='Информация о заказе'
+                title={currentOrder?.number ? `#${currentOrder?.number}` : ''}
                 onClose={() => {
                   navigate(-1);
                   dispatch(clearCurrentOrder());
