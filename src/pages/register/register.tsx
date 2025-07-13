@@ -1,7 +1,10 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
 import { useDispatch } from '../../services/store';
-import { getUser, registerUserThunk } from '../../services/slices/UserSlice';
+import {
+  getUser,
+  registerUserThunk
+} from '../../services/slices/UserSlice/UserSlice';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 

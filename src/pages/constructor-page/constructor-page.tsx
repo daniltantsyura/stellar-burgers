@@ -9,8 +9,9 @@ import { FC, useEffect } from 'react';
 import {
   getIngredientsLoading,
   getIngredientsThunk
-} from '../../services/slices/IngredientsSlice';
+} from '../../services/slices/IngredientSlice/IngredientsSlice';
 import { Outlet } from 'react-router-dom';
+import { getUserThunk } from '../../services/slices/UserSlice/UserSlice';
 
 export const ConstructorPage: FC = () => {
   const isIngredientsLoading = useSelector(getIngredientsLoading);
@@ -18,6 +19,7 @@ export const ConstructorPage: FC = () => {
 
   useEffect(() => {
     dispatch(getIngredientsThunk());
+    dispatch(getUserThunk());
   }, [dispatch]);
 
   return (

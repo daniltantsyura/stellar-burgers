@@ -1,9 +1,9 @@
 import { combineSlices } from '@reduxjs/toolkit';
-import { userSlice } from './slices/UserSlice';
-import { ingredientsSlice } from './slices/IngredientsSlice';
-import { constructorSlice } from './slices/ConstructorSlice';
-import { ordersSlice } from './slices/OrdersSlice';
-import { feedsSlice } from './slices/FeedSlice';
+import { userSlice } from './slices/UserSlice/UserSlice';
+import { ingredientsSlice } from './slices/IngredientSlice/IngredientsSlice';
+import { constructorSlice } from './slices/ConstructorSlice/ConstructorSlice';
+import { ordersSlice } from './slices/OrderSlice/OrdersSlice';
+import { feedsSlice } from './slices/FeedSlice/FeedSlice';
 
 export const rootReducer = combineSlices(
   userSlice,
@@ -12,3 +12,4 @@ export const rootReducer = combineSlices(
   ordersSlice,
   feedsSlice
 );
+console.log(rootReducer);

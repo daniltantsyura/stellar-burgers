@@ -8,7 +8,7 @@ import { useSelector } from '../../services/store';
 import {
   getAllIngredients,
   getIngredientsThunk
-} from '../../services/slices/IngredientsSlice';
+} from '../../services/slices/IngredientSlice/IngredientsSlice';
 
 const maxIngredients = 6;
 

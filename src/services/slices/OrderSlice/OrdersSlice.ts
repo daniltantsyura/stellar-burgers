@@ -1,9 +1,13 @@
-import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
+import {
+  getOrderByNumberApi,
+  getOrdersApi,
+  orderBurgerApi
+} from '../../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { TRejecedAction, TRejectedData } from '../store';
+import { TRejecedAction, TRejectedData } from '../../store';
 
-type TOrdersState = {
+export type TOrdersState = {
   orders: TOrder[];
   ordersLoading: boolean;
   ordersError: unknown | null;
@@ -116,3 +120,5 @@ export const getOrderByNumberThunk = createAsyncThunk(
   'orders/getOrderByNumber',
   async (data: number) => await getOrderByNumberApi(data)
 );
+
+export const orderReducer = ordersSlice.reducer;

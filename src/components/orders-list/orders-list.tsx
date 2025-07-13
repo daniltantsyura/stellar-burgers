@@ -3,7 +3,7 @@ import { FC, memo, useEffect } from 'react';
 import { OrdersListProps } from './type';
 import { OrdersListUI } from '@ui';
 import { useDispatch } from '../../services/store';
-import { getIngredientsThunk } from '../../services/slices/IngredientsSlice';
+import { getIngredientsThunk } from '../../services/slices/IngredientSlice/IngredientsSlice';
 
 export const OrdersList: FC<OrdersListProps> = memo(({ orders }) => {
   const dispatch = useDispatch();

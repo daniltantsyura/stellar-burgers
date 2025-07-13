@@ -5,7 +5,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import {
   getAllIngredients,
   getIngredientsThunk
-} from '../../services/slices/IngredientsSlice';
+} from '../../services/slices/IngredientSlice/IngredientsSlice';
 import { useDispatch, useSelector } from '../../services/store';
 
 export const IngredientDetails: FC = () => {

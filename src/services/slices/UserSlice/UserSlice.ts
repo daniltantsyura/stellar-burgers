@@ -7,7 +7,7 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from '../../../utils/burger-api';
 import {
   AsyncThunk,
   createAsyncThunk,
@@ -17,10 +17,10 @@ import {
   SerializedError
 } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { TRejecedAction, TRejectedData } from '../store';
-import { deleteCookie, setCookie } from '../../utils/cookie';
+import { TRejecedAction, TRejectedData } from '../../store';
+import { deleteCookie, setCookie } from '../../../utils/cookie';
 
-type TUserState = {
+export type TUserState = {
   user: TUser | null;
   userError: unknown | null;
   userLoading: boolean;
@@ -127,11 +127,11 @@ export const getUserThunk = createAsyncThunk(
   async () => await getUserApi()
 );
 
-export const logoutThunk = createAsyncThunk('user/logout',
-  async () => {
-    const res = await logoutApi();
-    deleteCookie('accessToken');
-    localStorage.removeItem('refreshToken');
-    return res;
-  }
-);
+export const logoutThunk = createAsyncThunk('user/logout', async () => {
+  const res = await logoutApi();
+  deleteCookie('accessToken');
+  localStorage.removeItem('refreshToken');
+  return res;
+});
+
+export const userReducer = userSlice.reducer;

@@ -1,9 +1,9 @@
-import { getIngredientsApi } from '@api';
+import { getIngredientsApi } from '../../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
-import { TRejecedAction, TRejectedData } from '../store';
+import { TRejecedAction, TRejectedData } from '../../store';
 
-type TIngredientsState = {
+export type TIngredientsState = {
   buns: TIngredient[];
   mains: TIngredient[];
   sauces: TIngredient[];
@@ -23,7 +23,7 @@ const initialState: TIngredientsState = {
 };
 
 const handlePending = (state: TIngredientsState) => {
-  state = { ...initialState, ingredientsLoading: true };
+  state.ingredientsLoading = true;
 };
 
 const handleRejected = (
@@ -83,3 +83,5 @@ export const getIngredientsThunk = createAsyncThunk(
   'ingredients/getAll',
   async () => await getIngredientsApi()
 );
+
+export const ingredientReducer = ingredientsSlice.reducer;
