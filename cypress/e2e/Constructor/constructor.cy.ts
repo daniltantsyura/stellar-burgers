@@ -2,7 +2,6 @@ import mockIngredients from '../../../mocks/ingredients.json';
 import mockUser from '../../../mocks/userResponse.json';
 import mockOrder from '../../../mocks/order.json';
 import mockTockens from '../../../mocks/tokens.json';
-import { testUrl } from 'cypress/constants';
 
 before(() => {
     cy.intercept('GET', 'api/ingredients', {
@@ -12,7 +11,7 @@ before(() => {
 });
 
 beforeEach(() => {
-    cy.visit(testUrl!);
+    cy.visit('/');
 });
 
 describe('Добавление ингредиентов', () => {
