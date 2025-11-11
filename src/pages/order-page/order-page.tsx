@@ -3,13 +3,13 @@ import styles from './order-page.module.css';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch } from '../../services/store';
 import { FC, useEffect } from 'react';
-import { getOrderByNumberThunk } from '../../services/slices/OrdersSlice';
-import { getIngredientsThunk } from '../../services/slices/IngredientsSlice';
+import { getOrderByNumberThunk } from '../../services/slices/OrderSlice/OrdersSlice';
+import { getIngredientsThunk } from '../../services/slices/IngredientSlice/IngredientsSlice';
 import { useSelector } from 'react-redux';
 
 export const OrderPage: FC = () => {
   const dispatch = useDispatch();
-  const {number} = useParams();
+  const { number } = useParams();
 
   useEffect(() => {
     dispatch(getIngredientsThunk());

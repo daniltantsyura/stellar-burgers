@@ -5,7 +5,7 @@ import {
   getUserLoading,
   getUser,
   getUserThunk
-} from '../../services/slices/UserSlice';
+} from '../../services/slices/UserSlice/UserSlice';
 import { useDispatch, useSelector } from '../../services/store';
 
 type ProtectedRouteProps = {

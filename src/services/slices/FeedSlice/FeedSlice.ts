@@ -1,8 +1,8 @@
-import { getFeedsApi } from '@api';
+import { getFeedsApi } from '../../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 
-type TFeedsInitialState = {
+export type TFeedsInitialState = {
   feeds: TOrder[];
   total: number;
   totalToday: number;
@@ -34,6 +34,9 @@ export const feedsSlice = createSlice({
         state.feedsLoading = false;
       })
       .addCase(getFeedsThunk.fulfilled, (state, action) => {
+        console.log(
+          JSON.stringify([action.payload.orders[0], action.payload.orders[1]])
+        );
         state.feeds = action.payload.orders;
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
@@ -54,3 +57,5 @@ export const getFeedsThunk = createAsyncThunk(
   'feeds/get',
   async () => await getFeedsApi()
 );
+
+export const feedReducer = feedsSlice.reducer;

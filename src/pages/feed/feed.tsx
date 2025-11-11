@@ -3,7 +3,10 @@ import { FeedUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getFeedsOrders, getFeedsThunk } from '../../services/slices/FeedSlice';
+import {
+  getFeedsOrders,
+  getFeedsThunk
+} from '../../services/slices/FeedSlice/FeedSlice';
 import { Outlet } from 'react-router-dom';
 
 export const Feed: FC = () => {

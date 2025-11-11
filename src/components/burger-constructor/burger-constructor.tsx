@@ -4,15 +4,18 @@ import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import {
   clearConstructor,
-  getConstructor,
-} from '../../services/slices/ConstructorSlice';
+  getConstructor
+} from '../../services/slices/ConstructorSlice/ConstructorSlice';
 import {
   clearCurrentOrder,
   getCurrentOrder,
   getOrderRequest,
   orderBurgerThunk
-} from '../../services/slices/OrdersSlice';
-import { getUser } from '../../services/slices/UserSlice';
+} from '../../services/slices/OrderSlice/OrdersSlice';
+import {
+  getUser,
+  getUserThunk
+} from '../../services/slices/UserSlice/UserSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
@@ -27,9 +30,10 @@ export const BurgerConstructor: FC = () => {
   const orderModalData = useSelector(getCurrentOrder);
 
   const onOrderClick = () => {
+    dispatch(getUserThunk());
     if (!constructorItems.bun || orderRequest) return;
     if (!user) {
-      navigate('/login', {state: {from: location}});
+      navigate('/login', { state: { from: location } });
       return;
     }
     dispatch(
@@ -39,9 +43,9 @@ export const BurgerConstructor: FC = () => {
         ...constructorItems.ingredients.map((ingredient) => ingredient._id)
       ])
     ).then((action) => {
-    if (orderBurgerThunk.fulfilled.match(action)) {
-      dispatch(clearConstructor());
-    }
+      if (orderBurgerThunk.fulfilled.match(action)) {
+        dispatch(clearConstructor());
+      }
     });
   };
   const closeOrderModal = () => {

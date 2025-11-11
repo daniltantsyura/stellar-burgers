@@ -13,17 +13,17 @@ import '../../index.css';
 import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import {
-  Route,
-  Routes,
-  useLocation,
-  useNavigate
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/ProtectedRoute';
 import { useDispatch, useSelector } from '../../services/store';
-import { clearCurrentOrder, getCurrentOrder } from '../../services/slices/OrdersSlice';
+import {
+  clearCurrentOrder,
+  getCurrentOrder
+} from '../../services/slices/OrderSlice/OrdersSlice';
 import { IngredientPage } from '../../pages/ingredient-page/ingredient-page';
 import { OrderPage } from '../../pages/order-page/order-page';
+
+import mockIngredients from '../../../mocks/ingredients.json';
 
 const App = () => {
   const navigate = useNavigate();
@@ -49,30 +49,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path='/register'
-          element={
-            <ProtectedRoute onlyUnAuth>
-              <Register />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/forgot-password'
-          element={
-            <ProtectedRoute onlyUnAuth>
-              <ForgotPassword />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/reset-password'
-          element={
-            <ProtectedRoute onlyUnAuth>
-              <ResetPassword />
-            </ProtectedRoute>
-          }
-        />
+        <Route path='/register' element={<Register />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/profile'>
           <Route
             index

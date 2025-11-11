@@ -3,7 +3,7 @@ import styles from './ingredient-page.module.css';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from '../../services/store';
 import { FC, useEffect } from 'react';
-import { getIngredientsThunk } from '../../services/slices/IngredientsSlice';
+import { getIngredientsThunk } from '../../services/slices/IngredientSlice/IngredientsSlice';
 
 export const IngredientPage: FC = () => {
   const dispatch = useDispatch();
